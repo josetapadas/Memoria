@@ -23,11 +23,11 @@ class ViewController: UIViewController {
     }
     
     func setupButtons() {
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.darkBlue()
         
-        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y / 2.0), title: "Apprentice", color: UIColor.greenColor(), action: #selector(ViewController.onApprenticeClick))
+        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y / 2.0), title: "Apprentice", color: UIColor.darkGreen(), action: #selector(ViewController.onApprenticeClick))
         
-        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y), title: "Regular", color: UIColor.yellowColor(), action: #selector(ViewController.onRegularClick))
+        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y), title: "Regular", color: UIColor.darkOrange(), action: #selector(ViewController.onRegularClick))
         
         buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y + view.center.y / 2.0), title: "Master", color: UIColor.redColor(), action: #selector(ViewController.onMasterClick))
         
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
 
 
 // Creating Buttons
-private extension ViewController {
+extension ViewController {
     func buildBUttonWithCenter(center: CGPoint, title: String, color: UIColor, action: Selector) {
         let button = UIButton()
         
@@ -49,15 +49,15 @@ private extension ViewController {
         view.addSubview(button)
     }
     
-    @objc func onApprenticeClick(sender: UIButton) {
+    func onApprenticeClick(sender: UIButton) {
         setNewGameLevel(.Apprentice)
     }
     
-    @objc func onRegularClick(sender: UIButton) {
+    func onRegularClick(sender: UIButton) {
         setNewGameLevel(.Regular);
     }
     
-    @objc func onMasterClick(sender: UIButton) {
+    func onMasterClick(sender: UIButton) {
         setNewGameLevel(.Master);
     }
 }
@@ -78,3 +78,25 @@ private extension ViewController {
         }
     }
 }
+
+private extension UIColor {
+    class func getColorFromRGBComponents(components: (CGFloat, CGFloat, CGFloat)) -> UIColor {
+        return UIColor(red: components.0/255, green: components.1/255, blue: components.2/255, alpha: 1)
+    }
+}
+
+extension UIColor {
+    class func darkBlue() -> UIColor {
+        return UIColor.getColorFromRGBComponents((44, 62, 80))
+    }
+    class func darkGreen() -> UIColor {
+        return UIColor.getColorFromRGBComponents((39, 174, 96))
+    }
+    class func darkOrange() -> UIColor {
+        return UIColor.getColorFromRGBComponents((211, 84, 0))
+    }
+    class func darkRed() -> UIColor {
+        return UIColor.getColorFromRGBComponents((192, 57, 43))
+    }
+}
+
