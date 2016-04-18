@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum Level {
+    case Apprentice, Regular, Master
+}
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -25,11 +29,11 @@ class ViewController: UIViewController {
     func setupButtons() {
         view.backgroundColor = UIColor.darkBlue()
         
-        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y / 2.0), title: "Apprentice", color: UIColor.darkGreen(), action: #selector(ViewController.onApprenticeClick))
+        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y / 2.0), title: "Apprentice", color: UIColor.darkWhite(), action: #selector(ViewController.onApprenticeClick))
         
-        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y), title: "Regular", color: UIColor.darkOrange(), action: #selector(ViewController.onRegularClick))
+        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y), title: "Regular", color: UIColor.darkGray(), action: #selector(ViewController.onRegularClick))
         
-        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y + view.center.y / 2.0), title: "Master", color: UIColor.redColor(), action: #selector(ViewController.onMasterClick))
+        buildBUttonWithCenter(CGPoint(x: view.center.x, y: view.center.y + view.center.y / 2.0), title: "Master", color: UIColor.blackColor(), action: #selector(ViewController.onMasterClick))
         
     }
 }
@@ -63,19 +67,10 @@ extension ViewController {
 }
 
 private extension ViewController {
-    enum Level {
-        case Apprentice, Regular, Master
-    }
-    
     func setNewGameLevel(level: Level) {
-        switch level {
-        case .Apprentice:
-            NSLog("Apprentice");
-        case .Regular:
-            NSLog("Regular!")
-        case .Master:
-            NSLog("Master!")
-        }
+        let mainGameViewController = MemoriaViewController(level: level)
+        
+        presentViewController(mainGameViewController, animated: true, completion: nil)
     }
 }
 
@@ -89,14 +84,14 @@ extension UIColor {
     class func darkBlue() -> UIColor {
         return UIColor.getColorFromRGBComponents((44, 62, 80))
     }
-    class func darkGreen() -> UIColor {
-        return UIColor.getColorFromRGBComponents((39, 174, 96))
+    class func darkGray() -> UIColor {
+        return UIColor.getColorFromRGBComponents((127, 140, 141))
     }
-    class func darkOrange() -> UIColor {
-        return UIColor.getColorFromRGBComponents((211, 84, 0))
+    class func darkWhite() -> UIColor {
+        return UIColor.getColorFromRGBComponents((189, 195, 199))
     }
-    class func darkRed() -> UIColor {
-        return UIColor.getColorFromRGBComponents((192, 57, 43))
+    class func darkGold() -> UIColor {
+        return UIColor.getColorFromRGBComponents((241, 196, 15))
     }
 }
 
