@@ -12,7 +12,7 @@ import UIKit
 class MemoriaViewController : UIViewController {
     private let level : Level
     private var collectionView : UICollectionView!
-    private var deck : Array<Int>!
+    private var deck : Deck!
     
     init(level: Level) {
         self.level = level
@@ -35,8 +35,124 @@ class MemoriaViewController : UIViewController {
     }
     
     func start() {
-        deck = Array<Int>(count: numberOfCarsByLevel(level), repeatedValue: 1)
+        deck = createDeck(numberOfCarsByLevel(level))
+        
+        for i in 0..<deck.count {
+            NSLog("The card at index \(i) is \(deck[i].description)")
+        }
+        
         collectionView.reloadData()
+    }
+}
+
+// MARK: Deck setup
+func createDeck(numCards: Int) -> Deck {
+    let fullDeck = Deck.full().shuffled()
+    let halfDeck = fullDeck.deckOfNUmberOfCards(numCards/2)
+    return (halfDeck + halfDeck).shuffled()
+}
+
+enum Suit: CustomStringConvertible {
+    case Spades, Hearts, Diamonds, Clubs
+    var description: String {
+        switch self {
+        case .Spades:
+            return "spades"
+        case .Hearts:
+            return "hearts"
+        case .Diamonds:
+            return "diamonds"
+        case .Clubs:
+            return "clubs"
+        }
+    }
+}
+
+// we'll use the Int protocol so we can use the rawValue
+enum Rank: Int, CustomStringConvertible {
+    case Ace = 1
+    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+    case Jack, Queen, King
+    
+    var description: String {
+        switch self {
+        case .Ace:
+            return "ace"
+        case .Jack:
+            return "jack"
+        case .Queen:
+            return "queen"
+        case .King:
+            return "king"
+        default:
+            return String(self.rawValue)
+        }
+    }
+}
+
+struct Card: CustomStringConvertible, Equatable {
+    private let rank: Rank
+    private let suit: Suit
+    
+    var description: String {
+        return "\(rank.description)_of_\(suit.description)"
+    }
+}
+
+func ==(card1: Card, card2: Card) -> Bool {
+    return card1.rank == card2.rank && card1.suit == card2.suit
+}
+
+func +(deck1: Deck, deck2: Deck) -> Deck {
+    return Deck(cards: deck1.cards + deck2.cards)
+}
+
+struct Deck {
+    private var cards = [Card]()
+    
+    var count : Int {
+        get {
+            return cards.count
+        }
+    }
+    
+    subscript(index: Int) -> Card {
+        get {
+            return cards[index]
+        }
+    }
+    
+    static func full() -> Deck {
+        var deck = Deck()
+        
+        for i in Rank.Ace.rawValue...Rank.King.rawValue {
+            for suit in [Suit.Spades, Suit.Hearts, Suit.Clubs, Suit.Diamonds] {
+                let card = Card(rank: Rank(rawValue: i)!, suit: suit)
+                
+                deck.cards.append(card)
+            }
+        }
+        
+        return deck
+    }
+    
+    // http://en.wikipedia.org/wiki/Fisher–Yates_shuffle.
+    func shuffled() -> Deck {
+        var list = cards
+        
+        for i in 0..<(list.count - 1) {
+            let j = Int(arc4random_uniform(UInt32(list.count - i))) + i
+            
+            if(j != i) {
+                swap(&list[i], &list[j])
+            }
+        }
+        
+        return Deck(cards: list)
+    }
+    
+    func deckOfNUmberOfCards(num: Int) -> Deck {
+        return Deck(cards: Array(cards[0..<num]))
     }
 }
 
